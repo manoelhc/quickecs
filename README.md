@@ -40,6 +40,7 @@ Push the image to ECR:
 docker push 277403261980.dkr.ecr.us-west-1.amazonaws.com/gentle_api:latest
 ```
 >> Note: Make sure to replace the account ID with your own and the ECR has been created. To create it without creating the whole ECS infra, please deploy the states bucket below and run:
+
 ```bash
 cd terraform/environments/dev
 terraform init -var-file ../../tfvars/dev.tfvars
@@ -81,12 +82,28 @@ terraform apply terraform/environments/dev/vpc.tf
 ```
 
 Then, deploy the ECS cluster:
-```
 
 ```bash
 terraform apply -var image=277403261980.dkr.ecr.us-west-2.amazonaws.com/gentle_api:latest
 ```
 
+### Justfile
+
+Use `just` to automate the deployment process. The `justfile` contains the commands to deploy the service to ECS.
+
+```bash
+Available recipes:
+    build        # Build docker image
+    deploy-all   # Deploy the application, from building the image to deploying the ECS service
+    deploy-ecs   # Create the ECS cluster and service with the new image
+    deploy-image # Build and push docker image to ECR
+    destroy-all  # Destroy all resources
+    fmt
+    help         # This recipe
+    just-doc
+    push         # Push docker image to ECR
+    tfsec
+````
 
 ### AWS Infra diagram
 
