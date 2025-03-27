@@ -152,5 +152,5 @@ architecture-beta
     alb2:L -- R:igw
     alb3:L -- R:igw
 
-    igw:L -- R:internet
+    igw:R -- L:internet
 ```
