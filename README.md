@@ -126,6 +126,11 @@ architecture-beta
     service alb2(logos:aws-alb)[ALB in AZ2] in public_subnets_a2
     service alb3(logos:aws-alb)[ALB in AZ3] in public_subnets_a3
 
+    service natgateway1(logos:aws-alb)[NATGW in AZ1] in public_subnets_a1
+    service natgateway2(logos:aws-alb)[NATGW in AZ2] in public_subnets_a2
+    service natgateway3(logos:aws-alb)[NATGW in AZ3] in public_subnets_a3
+
+
     group private_subnets(logos:aws-subnet)[Private_Subnets] in vpc
 
     group private_subnets_a1(logos:aws-subnet)[Subnet in AZ1] in private_subnets
@@ -136,21 +141,37 @@ architecture-beta
     service ecs_node2(logos:aws-ecs)[ECS_Node in AZ2] in private_subnets_a2
     service ecs_node3(logos:aws-ecs)[ECS_Node in AZ3] in private_subnets_a3
 
-    alb1:L -- R:ecs_node1
-    alb1:L -- R:ecs_node2
-    alb1:L -- R:ecs_node3
+    alb1:L <--> R:ecs_node1
+    alb1:L <--> R:ecs_node2
+    alb1:L <--> R:ecs_node3
 
-    alb2:L -- R:ecs_node1
-    alb2:L -- R:ecs_node2
-    alb2:L -- R:ecs_node3
+    alb2:L <--> R:ecs_node1
+    alb2:L <--> R:ecs_node2
+    alb2:L <--> R:ecs_node3
 
-    alb3:L -- R:ecs_node1
-    alb3:L -- R:ecs_node2
-    alb3:L -- R:ecs_node3
+    alb3:L <--> R:ecs_node1
+    alb3:L <--> R:ecs_node2
+    alb3:L <--> R:ecs_node3
 
-    alb1:L -- R:igw
-    alb2:L -- R:igw
-    alb3:L -- R:igw
+    natgateway1:L <--> R:ecs_node1
+    natgateway1:L <--> R:ecs_node2
+    natgateway1:L <--> R:ecs_node3
 
-    igw:R -- L:internet
+    natgateway2:L <--> R:ecs_node1
+    natgateway2:L <--> R:ecs_node2
+    natgateway2:L <--> R:ecs_node3
+
+    natgateway3:L <--> R:ecs_node1
+    natgateway3:L <--> R:ecs_node2
+    natgateway3:L <--> R:ecs_node3
+
+    alb1:L <--> R:igw
+    alb2:L <--> R:igw
+    alb3:L <--> R:igw
+
+    natgateway2:L <--> R:igw
+    natgateway1:L <--> R:igw
+    natgateway3:L <--> R:igw
+
+    igw:R <--> L:internet
 ```
