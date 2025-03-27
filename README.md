@@ -116,11 +116,11 @@ architecture-beta
     group vpc(logos:aws-vpc)[VPC] in aws
     
 
-    group public_subnetes(logos:aws-subnet)[Public_Subnets] in vpc
+    group public_subnets(logos:aws-subnet)[Public_Subnets] in vpc
 
-    group public_subnets_a1(logos:aws-subnet)[Subnet in AZ1] in public_subnetes
-    group public_subnets_a2(logos:aws-subnet)[Subnet in AZ2] in public_subnetes
-    group public_subnets_a3(logos:aws-subnet)[Subnet in AZ3] in public_subnetes
+    group public_subnets_a1(logos:aws-subnet)[Subnet in AZ1] in public_subnets
+    group public_subnets_a2(logos:aws-subnet)[Subnet in AZ2] in public_subnets
+    group public_subnets_a3(logos:aws-subnet)[Subnet in AZ3] in public_subnets
 
     service alb1(logos:aws-alb)[ALB in AZ1] in public_subnets_a1
     service alb2(logos:aws-alb)[ALB in AZ2] in public_subnets_a2
