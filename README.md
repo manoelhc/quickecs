@@ -109,25 +109,48 @@ Available recipes:
 
 ```mermaid
 architecture-beta
-    group vpc(cloud)[VPC]
+    service internet(logos:aws)[internet]
+    group aws(logos:aws)[AWS]
+    service ecs_cluster(logos:aws-ecs)[ECS_Cluster] in aws
+    service igw(logos:aws-igw)[Internet Gateway] in aws
+    group vpc(logos:aws-vpc)[VPC] in aws
+    
 
-    group public_subnets(group)[Public_Subnets] in vpc
-    service alb1(load-balancer)[ALB in AZ1] in public_subnets
-    service alb2(load-balancer)[ALB in AZ2] in public_subnets
-    service alb3(load-balancer)[ALB in AZ3] in public_subnets
+    group public_subnets(logos:aws-subnet)[Public_Subnets] in vpc
 
-    group private_subnets(group)[Private_Subnets] in vpc
-    service ecs_node1(container)[ECS_Node in AZ1] in private_subnets
-    service ecs_node2(container)[ECS_Node in AZ2] in private_subnets
-    service ecs_node3(container)[ECS_Node in AZ3] in private_subnets
+    group public_subnets_a1(logos:aws-subnet)[Subnet in AZ1] in public_subnets
+    group public_subnets_a2(logos:aws-subnet)[Subnet in AZ2] in public_subnets
+    group public_subnets_a3(logos:aws-subnet)[Subnet in AZ3] in public_subnets
 
-    service ecs_cluster(server)[ECS_Cluster] in vpc
+    service alb1(logos:aws-alb)[ALB in AZ1] in public_subnets_a1
+    service alb2(logos:aws-alb)[ALB in AZ2] in public_subnets_a2
+    service alb3(logos:aws-alb)[ALB in AZ3] in public_subnets_a3
 
-    alb1:B -- T:ecs_node1
-    alb2:B -- T:ecs_node2
-    alb3:B -- T:ecs_node3
+    group private_subnets(logos:aws-subnet)[Private_Subnets] in vpc
 
-    ecs_node1:T -- B:ecs_cluster
-    ecs_node2:T -- B:ecs_cluster
-    ecs_node3:T -- B:ecs_cluster
+    group private_subnets_a1(logos:aws-subnet)[Subnet in AZ1] in private_subnets
+    group private_subnets_a2(logos:aws-subnet)[Subnet in AZ2] in private_subnets
+    group private_subnets_a3(logos:aws-subnet)[Subnet in AZ3] in private_subnets
+
+    service ecs_node1(logos:aws-ecs)[ECS_Node in AZ1] in private_subnets_a1
+    service ecs_node2(logos:aws-ecs)[ECS_Node in AZ2] in private_subnets_a2
+    service ecs_node3(logos:aws-ecs)[ECS_Node in AZ3] in private_subnets_a3
+
+    alb1:L -- R:ecs_node1
+    alb1:L -- R:ecs_node2
+    alb1:L -- R:ecs_node3
+
+    alb2:L -- R:ecs_node1
+    alb2:L -- R:ecs_node2
+    alb2:L -- R:ecs_node3
+
+    alb3:L -- R:ecs_node1
+    alb3:L -- R:ecs_node2
+    alb3:L -- R:ecs_node3
+
+    alb1:L -- R:igw
+    alb2:L -- R:igw
+    alb3:L -- R:igw
+
+    igw:L -- R:internet
 ```
